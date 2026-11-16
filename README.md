@@ -187,3 +187,149 @@ Registrar fallos de servicios externos y permitir reintentos controlados sin dup
 RNF-10 Recuperación
 
 Contar con copias de seguridad y un procedimiento de restauración probado.
+
+Escenarios de calidad
+
+Escenario
+
+Condición / estímulo
+
+Respuesta y medida
+
+Verificación
+
+EC-01 Rendimiento
+
+Un operador consulta un pedido durante la operación normal.
+
+95% de respuestas en ≤ 2 s bajo carga de prueba acordada.
+
+Prueba de carga y medición del percentil 95.
+
+EC-02 Evitar duplicados
+
+Un canal reenvía el mismo pedido por un error de comunicación.
+
+Se conserva un solo pedido para la misma clave de solicitud.
+
+Enviar solicitudes repetidas y revisar persistencia.
+
+EC-03 Trazabilidad
+
+Un pedido cambia de estado.
+
+Todos los cambios registran fecha/hora, pedido, evento y actor.
+
+Revisión de historial y registros.
+
+EC-04 Seguridad
+
+Un usuario intenta ejecutar una acción no permitida para su rol.
+
+La operación es rechazada en todos los casos de prueba no autorizados.
+
+Pruebas de autorización por roles.
+
+EC-05 Fallo externo
+
+El servicio de notificaciones deja de responder.
+
+El estado del pedido se conserva y el aviso queda pendiente de reintento.
+
+Simular indisponibilidad externa.
+
+EC-06 Disponibilidad
+
+Se observa la plataforma durante un mes.
+
+Objetivo inicial de 99,5% de disponibilidad mensual.
+
+Monitoreo y reporte mensual.
+
+EC-07 Evolución
+
+Se modifica una regla de asignación de entregas.
+
+El cambio se realiza en el módulo correspondiente sin alterar módulos no relacionados.
+
+Prueba de cambio y revisión de dependencias.
+
+7. Comparación de alternativas estructurales
+
+Criterio
+
+A. Monolito modular
+
+B. Arquitectura distribuida por servicios
+
+Estructura
+
+Una aplicación organizada en módulos con límites de dominio.
+
+Servicios independientes comunicados por APIs o mensajería.
+
+Costo inicial
+
+Menor en general: menos infraestructura y operación.
+
+Mayor: varios servicios, despliegues, monitoreo y coordinación.
+
+Complejidad
+
+Menor complejidad operativa inicial.
+
+Mayor complejidad de comunicación y operación distribuida.
+
+Rapidez de implementación
+
+Conveniente para equipo pequeño/mediano y primera versión.
+
+Puede tomar más tiempo por contratos, despliegue y observabilidad.
+
+Evolución
+
+Puede evolucionar por módulos si se respetan los límites.
+
+Permite evolución y despliegue independiente de cada servicio.
+
+Escalabilidad
+
+Se escala la aplicación completa.
+
+Permite escalar servicios específicos.
+
+Riesgo operativo
+
+Un fallo importante puede afectar varios módulos.
+
+Puede aislar fallos, pero existen fallos de red y consistencia distribuida.
+
+Trazabilidad
+
+Más sencilla al inicio con un flujo e historial centralizados.
+
+Requiere correlacionar eventos y solicitudes entre servicios.
+
+Adecuación al caso
+
+Alta para comenzar y validar el proceso logístico.
+
+Puede ser excesiva sin evidencia de necesidades independientes.
+
+8. Decisión arquitectónica y justificación
+
+Se elige la alternativa A: monolito modular. La aplicación se organizará en módulos de Pedidos, Inventario, Entregas y Rutas, Incidencias, Usuarios y Accesos e Integraciones. Cada módulo tendrá responsabilidades definidas y se comunicará mediante interfaces internas claras, evitando que un módulo manipule directamente los detalles internos de otro.
+
+La elección es apropiada porque la necesidad inmediata es centralizar la operación y asegurar la trazabilidad. Con la información disponible no se ha demostrado que cada dominio necesite escalar o desplegarse de manera independiente. El monolito modular reduce la complejidad inicial y permite validar el negocio antes de asumir los costos de una solución distribuida.
+
+Trade-offs
+
+Se gana simplicidad de construcción, despliegue y monitoreo inicial.
+
+Se gana una trazabilidad más sencilla al mantener un flujo común de información.
+
+Se sacrifica escalamiento independiente de cada módulo.
+
+Existe riesgo de acoplamiento si no se respetan los límites; se mitiga con contratos internos y revisión de dependencias.
+
+La decisión se revisará si un dominio necesita escalar, desplegarse o aislarse de forma independiente
