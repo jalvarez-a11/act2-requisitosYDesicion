@@ -1,3 +1,5 @@
+LINK VIDEO PRESENTACION: https://youtu.be/Hw2EUhi7PXI
+
 Introducción
 
 En la Actividad 1 se diagnosticó que la empresa recibe pedidos desde varios canales, maneja inventarios distribuidos y coordina entregas con diferentes rutas y repartidores, pero no cuenta con una vista centralizada del estado real de cada pedido. Esto provoca duplicación de información, retrasos, errores operativos y poca trazabilidad.
